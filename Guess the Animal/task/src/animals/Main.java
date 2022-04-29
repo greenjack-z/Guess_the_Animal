@@ -3,17 +3,19 @@ package animals;
 import java.util.*;
 
 public class Main {
-    private final Vocabulary vocabulary;
+    private final String[] args;
+    private final Vocabulary vocabulary = new Vocabulary();
     private final Tree tree;
     private Boolean endGame = false;
 
-    Main () {
-        vocabulary = new Vocabulary();
+
+    Main (String[] args) {
+        this.args = args;
         tree = new Tree();
     }
 
     public static void main(String[] args) {
-        new Main().guessAnimal();
+        new Main(args).guessAnimal();
     }
 
     private void guessAnimal() {
@@ -42,11 +44,23 @@ public class Main {
     }
 
     private void intro() {
-        say(vocabulary.greeting());
-        say("I want to learn about animals.");
-        say("Which animal do you like most?");
-        tree.addNode(new Node(parseAnimal(read())));
-        say("I've learned so much about the animals!");
+        String fileType = null;
+        if (args.length == 0) {
+            fileType = "json";
+        } else if (args[0].equals("-type")) {
+            fileType = args[1];
+        }
+
+        tree.setMapper(fileType);
+        if (Boolean.FALSE.equals(tree.loadTree())) {
+            say(vocabulary.greeting());
+            say("I want to learn about animals.");
+            say("Which animal do you like most?");
+            tree.addNode(new Node(parseAnimal(read())));
+            say("I've learned so much about the animals!");
+        } else {
+            say("I know a lot about animals.");
+        }
         say("Let's play a game!");
         say("You think of an animal, and I guess it.");
         say("Press enter when you're ready.");
@@ -77,6 +91,7 @@ public class Main {
     private void playAgain() {
         say("Would you like to play again?");
         if (!readYes()) {
+            tree.saveTree();
             say(vocabulary.sayBye());
             endGame = true;
         } else {

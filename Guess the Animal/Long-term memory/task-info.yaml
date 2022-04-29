@@ -30,14 +30,6 @@ files:
       - "yes or no"
       - "The answer \"{0}\" is unclear and the program should ask again."
   learner_created: false
-- name: test/file-formats.data.yaml
-  visible: false
-  text: |-
-    ---
-    - - json
-    - - xml
-    - - yaml
-  learner_created: false
 - name: test/Scenario.java
   visible: false
   text: |-
@@ -381,6 +373,181 @@ files:
     - [uniCorn, an unicorn]
     - [linX, a linx]
   learner_created: false
+- name: test/positive-answers.script.yaml
+  visible: false
+  text: |+
+    #
+    # This is a script to test the correct interpretation of negative responses.
+    #
+    ---
+    - [start]
+    - [input, cat]
+    - [input, ""]   # Press Enter to start the game
+    #
+    # The game started
+    #
+    - [contains, "Is it a cat?", "The program should ask: \"Is it a cat?\""]
+    #
+    # Here we substitute all values from the data file
+    #
+    - [input, "{0}"]
+    - - not contains
+      - "yes or no"
+      - "The answer \"{0}\" should be treated as correct positive."
+
+  learner_created: false
+- name: src/animals/Node.java
+  visible: true
+  text: "package animals;\n\nimport java.util.logging.Logger;\n\npublic class Node\
+    \ {\n    private static Logger log = Main.logger;\n    String value;\n    String\
+    \ question;\n    Node left;\n    Node right;\n\n    Node(String input) {\n   \
+    \     this.value = parseValue(input);\n        this.question = makeQuestion(value);\n\
+    \        left = null;\n        right = null;\n    }\n\n    Node(String value,\
+    \ Node left, Node right) {\n        this(value);\n        this.left = left;\n\
+    \        this.right = right;\n    }\n    \n    private String makeQuestion(String\
+    \ text) {\n        if (text.matches(\"^(a|an) .+\")) {\n            return String.format(\"\
+    Is it %s?\", text);\n        } else {\n            if (text.matches(\"(?i)^it\
+    \ can .+\")) {\n                return text.replaceFirst(\"(?i)^it can \", \"\
+    Can it \") + \"?\";\n            } else if (text.matches(\"(?i)^it has .+\"))\
+    \ {\n                return text.replaceFirst(\"(?i)^it has \", \"Does it have\
+    \ \") + \"?\";\n            } else {\n                return text.replaceFirst(\"\
+    (?i)^it is \", \"Is it \") + \"?\";\n            }\n        }\n    }\n\n    private\
+    \ String parseValue(String text) {\n        if (text.matches(\"(?i)^it\\\\s.+\"\
+    )) {\n            return text;\n        } else {\n            text = text.replaceFirst(\"\
+    (?i)^(the|an|a)\\\\s\", \"\");\n            return (text.matches(\"^[eyuioa].+\"\
+    ) ? \"an \" : \"a \") + text;\n        }\n    }\n}\n"
+  learner_created: true
+- name: src/animals/Tree.java
+  visible: true
+  text: |
+    package animals;
+
+    import java.util.logging.Logger;
+
+    public class Tree {
+        private static Logger log = Main.logger;
+        Node root;
+        Node current;
+        Node parent;
+
+        Tree() {
+            root = null;
+            parent = null;
+            current = null;
+        }
+
+        public void add(Node target, Node parent, Node node) {
+            if (parent == null) {
+                root = node;
+            } else {
+                if (target == parent.left) {
+                    parent.left = node;
+                } else {
+                    parent.right = node;
+                }
+            }
+        }
+
+        private void showRecursive(Node node) {
+            if (node != null) {
+                System.out.println(node.value);
+                showRecursive(node.left);
+                showRecursive(node.right);
+            }
+        }
+
+        public void showTree() {
+            showRecursive(root);
+        }
+    }
+  learner_created: true
+- name: src/animals/Vocabulary.java
+  visible: true
+  text: |-
+    package animals;
+
+    import java.time.LocalTime;
+    import java.util.List;
+    import java.util.Random;
+
+    public class Vocabulary {
+        final static Random RND = new Random();
+
+        public String greeting() {
+            LocalTime time = LocalTime.now();
+            if (time.isAfter(LocalTime.of(05, 00)) && time.isBefore(LocalTime.of(12, 01))) {
+                return "Good morning";
+            }
+            if (time.isAfter(LocalTime.of(12, 00)) && time.isBefore(LocalTime.of(18, 01))) {
+                return "Good afternoon";
+            }
+            if (time.isAfter(LocalTime.of(18, 00)) && time.isBefore(LocalTime.of(05, 01))) {
+                return "Good evening";
+            }
+            return "Error";
+        }
+
+        public String clarification() {
+            List<String> sentences = List.of(
+                "I'm not sure I caught you: was it yes or no?",
+                "Funny, I still don't understand, is it yes or no?",
+                "Oh, it's too complicated for me: just tell me yes or no.",
+                "Could you please simply say yes or no?",
+                "Oh, no, don't try to confuse me: say yes or no."
+            );
+            return sentences.get(RND.nextInt(sentences.size()));
+        }
+
+        public String sayBye() {
+            List<String> sentences = List.of(
+                    "Have a nice day",
+                    "Bye Bye!",
+                    "See you.",
+                    "So long",
+                    "Goodbye."
+            );
+            return sentences.get(RND.nextInt(sentences.size()));
+        }
+
+        public Boolean isYes(String input) {
+            List<String> sentences = List.of(
+                    "y",
+                    "yes",
+                    "yeah",
+                    "yep",
+                    "sure",
+                    "right",
+                    "affirmative",
+                    "correct",
+                    "indeed",
+                    "you bet",
+                    "exactly",
+                    "you said it"
+            );
+            return  sentences.contains(input.replaceAll("\\b[.!]", ""));
+        }
+
+        public Boolean isNo(String input) {
+            List<String> sentences = List.of(
+                    "n",
+                    "no",
+                    "no way",
+                    "nah",
+                    "nope",
+                    "negative",
+                    "I don't think so",
+                    "yeah no"
+            );
+            return  sentences.contains(input.replaceAll("\\b[.!]",""));
+        }
+    }
+  learner_created: true
+- name: test/guessing-game.data.yaml
+  visible: true
+  learner_created: true
+- name: test/guessing-game.script.yaml
+  visible: true
+  learner_created: true
 - name: test/file-formats.script.yaml
   visible: false
   text: |+
@@ -490,29 +657,17 @@ files:
       - "The test can't delete animals.{0} file."
 
   learner_created: false
-- name: test/positive-answers.script.yaml
+- name: test/file-formats.data.yaml
   visible: false
-  text: |+
-    #
-    # This is a script to test the correct interpretation of negative responses.
-    #
+  text: |-
     ---
-    - [start]
-    - [input, cat]
-    - [input, ""]   # Press Enter to start the game
-    #
-    # The game started
-    #
-    - [contains, "Is it a cat?", "The program should ask: \"Is it a cat?\""]
-    #
-    # Here we substitute all values from the data file
-    #
-    - [input, "{0}"]
-    - - not contains
-      - "yes or no"
-      - "The answer \"{0}\" should be treated as correct positive."
-
+    - - json
+    - - xml
+    - - yaml
   learner_created: false
 feedback_link: https://hyperskill.org/learn/step/11082#comment
-status: Unchecked
-record: -1
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Fri, 29 Apr 2022 12:34:41 UTC
+record: 4

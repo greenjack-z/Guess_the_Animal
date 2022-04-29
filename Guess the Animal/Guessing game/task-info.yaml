@@ -206,9 +206,6 @@ files:
         }
     }
   learner_created: true
-- name: src/animals/Animal.java
-  visible: true
-  learner_created: true
 - name: test/negative-answers.data.yaml
   visible: false
   text: |
@@ -261,41 +258,218 @@ files:
     - - yeah no!
     - - yeah NO!
   learner_created: false
-- name: test/guessing-game.data.yaml
+- name: test/the-first-question.script.yaml
+  visible: false
+  text: |-
+    #
+    # This is a script to test the generation of the first question.
+    #
+    ---
+    - [start]
+    - [input, "{0}"]
+    - [input, ""]   # Press Enter to start the game
+    #
+    # The game started
+    #
+    - [contains, "Is it {1}?", "The program should ask: \"Is it {1}?\""]
+  learner_created: false
+- name: test/positive-answers.data.yaml
+  visible: false
+  text: |-
+    #
+    # The possible positive answers
+    #
+    ---
+    # The program must ignore the case of letters.
+    - - y
+    - - Y
+    # The user can put a point
+    - - y.
+    - - Y.
+    # An exclamation mark is also allowed.
+    - - y!
+    - - Y!
+    # The program must ignore leading spaces.
+    - - "   Yes"
+    # As well ignore trailing spaces.
+    - - "Yes   "
+    # All of the following expressions are valid answers.
+    - - yes
+    - - Yes
+    - - YES
+    - - yes.
+    - - Yes!
+    - - YES!
+    - - yES!
+    - - YeS
+    - - Yeah
+    - - yeah
+    - - Yeah!
+    - - YeAh.
+    - - YEAH
+    - - yep
+    - - yEp
+    - - Yep!
+    - - YEP.
+    - - sure
+    - - Sure!
+    - - SURE!
+    - - surE.
+    - - right
+    - - Right.
+    - - Right!
+    - - affirmative
+    - - Affirmative!
+    - - correct
+    - - correct.
+    - - indeed
+    - - you bet
+    - - exactly
+    - - you said it.
+    - - you said it!
+    - - you said it
+  learner_created: false
+- name: test/negative-answers.script.yaml
   visible: false
   text: |
     #
-    # This data file for test the Knowledge Tree
-    #
-    # Can it climb trees?
-    #  yes -> Does it have tassels on his ears?
-    #         -> yes -> Lynx
-    #         -> no  -> Cat
-    #  no  -> Is it living in the forest?
-    #         -> yes -> wolf
-    #         -> no  -> dog
+    # This is a script to test the correct interpretation of negative answers.
     #
     ---
-    - - |
-        yes
-        yes
-      - a lynx
-
-    - - |
-        yes
-        no
-      - a cat
-
-    - - |
-        no
-        yes
-      - a wolf
-
-    - - |
-        no
-        no
-      - a dog
+    - [start]
+    - [input, cat]
+    - [input, ""]   # Press Enter to start the game
+    #
+    # The game started
+    #
+    - [contains, "Is it a cat?", "The program should ask: \"Is it a cat?\""]
+    #
+    # Here we substitute all values from the data file
+    #
+    - [input, "{0}"]
+    - - not contains
+      - "yes or no"
+      - "The answer \"{0}\" should be treated as correct negative."
   learner_created: false
+- name: src/animals/Node.java
+  visible: true
+  learner_created: true
+- name: src/animals/Tree.java
+  visible: true
+  learner_created: true
+- name: test/unclear-answers.data.yaml
+  visible: false
+  text: |-
+    #
+    # All of the following expressions should be treated as unclear
+    #
+    ---
+    - - y..
+    - - Y!.
+    - - ye
+    - - jes
+    - - Jes
+    - - yes...
+    - - да
+    - - Так
+    - - yes, yes
+    - - Yea
+    - - Ja
+    - - Jawohl!
+    - - ja natürlich!
+    - - so genau
+    - - 1
+    - - +
+    - - yepi
+    - - Yep!!
+    - - Yes, sure!
+    - - Ok
+    - - Rights
+    - - affErmative
+    - - n..
+    - - N!!
+    - - nea
+    - - nop
+    - - noppi
+    - - no wa
+    - - no way!!!
+    - - na
+    - - nahi
+    - - nega
+    - - negat
+    - - negati
+    - - negativ
+    - - i don't think..
+    - - i don't
+    - - i
+    - - I no
+    - - i don't think so...
+    - -
+  learner_created: false
+- name: test/the-first-question.data.yaml
+  visible: false
+  text: |-
+    ---
+    - [cat, a cat]
+    - [DOG, a dog]
+    - [hare, a hare]
+    - [WOLF, a wolf]
+    - [uniCorn, an unicorn]
+    - [uniCorn, an unicorn]
+    - [A Unicorn, a unicorn]
+    - [APE, an ape]
+    - [uniCorn, an unicorn]
+    - [uniCorn, an unicorn]
+    - [linX, a linx]
+  learner_created: false
+- name: test/positive-answers.script.yaml
+  visible: false
+  text: |+
+    #
+    # This is a script to test the correct interpretation of negative responses.
+    #
+    ---
+    - [start]
+    - [input, cat]
+    - [input, ""]   # Press Enter to start the game
+    #
+    # The game started
+    #
+    - [contains, "Is it a cat?", "The program should ask: \"Is it a cat?\""]
+    #
+    # Here we substitute all values from the data file
+    #
+    - [input, "{0}"]
+    - - not contains
+      - "yes or no"
+      - "The answer \"{0}\" should be treated as correct positive."
+
+  learner_created: false
+- name: test/unclear-answers.script.yaml
+  visible: false
+  text: |
+    #
+    # This is a script to test the interpretation of unclear responses.
+    #
+    ---
+    - [start]
+    - [input, cat]
+    - [input, ""]   # Press Enter to start the game
+    #
+    # The game started
+    #
+    - [contains, "Is it a cat?", "The program should ask: \"Is it a cat?\""]
+    #
+    # Here we substitute all values from the data file
+    #
+    - [input, "{0}"]
+    - - contains
+      - "yes or no"
+      - "The answer \"{0}\" is unclear and the program should ask again."
+  learner_created: false
+- name: animals.json
+  visible: true
+  learner_created: true
 - name: test/guessing-game.script.yaml
   visible: false
   text: |+
@@ -462,215 +636,80 @@ files:
       - If we do not want to play any more, then the program should exit.
 
   learner_created: false
-- name: test/the-first-question.script.yaml
-  visible: false
-  text: |-
-    #
-    # This is a script to test the generation of the first question.
-    #
-    ---
-    - [start]
-    - [input, "{0}"]
-    - [input, ""]   # Press Enter to start the game
-    #
-    # The game started
-    #
-    - [contains, "Is it {1}?", "The program should ask: \"Is it {1}?\""]
-  learner_created: false
-- name: test/positive-answers.data.yaml
-  visible: false
-  text: |-
-    #
-    # The possible positive answers
-    #
-    ---
-    # The program must ignore the case of letters.
-    - - y
-    - - Y
-    # The user can put a point
-    - - y.
-    - - Y.
-    # An exclamation mark is also allowed.
-    - - y!
-    - - Y!
-    # The program must ignore leading spaces.
-    - - "   Yes"
-    # As well ignore trailing spaces.
-    - - "Yes   "
-    # All of the following expressions are valid answers.
-    - - yes
-    - - Yes
-    - - YES
-    - - yes.
-    - - Yes!
-    - - YES!
-    - - yES!
-    - - YeS
-    - - Yeah
-    - - yeah
-    - - Yeah!
-    - - YeAh.
-    - - YEAH
-    - - yep
-    - - yEp
-    - - Yep!
-    - - YEP.
-    - - sure
-    - - Sure!
-    - - SURE!
-    - - surE.
-    - - right
-    - - Right.
-    - - Right!
-    - - affirmative
-    - - Affirmative!
-    - - correct
-    - - correct.
-    - - indeed
-    - - you bet
-    - - exactly
-    - - you said it.
-    - - you said it!
-    - - you said it
-  learner_created: false
-- name: test/negative-answers.script.yaml
+- name: test/guessing-game.data.yaml
   visible: false
   text: |
     #
-    # This is a script to test the correct interpretation of negative answers.
+    # This data file for test the Knowledge Tree
+    #
+    # Can it climb trees?
+    #  yes -> Does it have tassels on his ears?
+    #         -> yes -> Lynx
+    #         -> no  -> Cat
+    #  no  -> Is it living in the forest?
+    #         -> yes -> wolf
+    #         -> no  -> dog
     #
     ---
-    - [start]
-    - [input, cat]
-    - [input, ""]   # Press Enter to start the game
-    #
-    # The game started
-    #
-    - [contains, "Is it a cat?", "The program should ask: \"Is it a cat?\""]
-    #
-    # Here we substitute all values from the data file
-    #
-    - [input, "{0}"]
-    - - not contains
-      - "yes or no"
-      - "The answer \"{0}\" should be treated as correct negative."
-  learner_created: false
-- name: test/unclear-answers.data.yaml
-  visible: false
-  text: |-
-    #
-    # All of the following expressions should be treated as unclear
-    #
-    ---
-    - - y..
-    - - Y!.
-    - - ye
-    - - jes
-    - - Jes
-    - - yes...
-    - - да
-    - - Так
-    - - yes, yes
-    - - Yea
-    - - Ja
-    - - Jawohl!
-    - - ja natürlich!
-    - - so genau
-    - - 1
-    - - +
-    - - yepi
-    - - Yep!!
-    - - Yes, sure!
-    - - Ok
-    - - Rights
-    - - affErmative
-    - - n..
-    - - N!!
-    - - nea
-    - - nop
-    - - noppi
-    - - no wa
-    - - no way!!!
-    - - na
-    - - nahi
-    - - nega
-    - - negat
-    - - negati
-    - - negativ
-    - - i don't think..
-    - - i don't
-    - - i
-    - - I no
-    - - i don't think so...
-    - -
-  learner_created: false
-- name: test/the-first-question.data.yaml
-  visible: false
-  text: |-
-    ---
-    - [cat, a cat]
-    - [DOG, a dog]
-    - [hare, a hare]
-    - [WOLF, a wolf]
-    - [uniCorn, an unicorn]
-    - [uniCorn, an unicorn]
-    - [A Unicorn, a unicorn]
-    - [APE, an ape]
-    - [uniCorn, an unicorn]
-    - [uniCorn, an unicorn]
-    - [linX, a linx]
-  learner_created: false
-- name: test/positive-answers.script.yaml
-  visible: false
-  text: |+
-    #
-    # This is a script to test the correct interpretation of negative responses.
-    #
-    ---
-    - [start]
-    - [input, cat]
-    - [input, ""]   # Press Enter to start the game
-    #
-    # The game started
-    #
-    - [contains, "Is it a cat?", "The program should ask: \"Is it a cat?\""]
-    #
-    # Here we substitute all values from the data file
-    #
-    - [input, "{0}"]
-    - - not contains
-      - "yes or no"
-      - "The answer \"{0}\" should be treated as correct positive."
+    - - |
+        yes
+        yes
+      - a lynx
 
+    - - |
+        yes
+        no
+      - a cat
+
+    - - |
+        no
+        yes
+      - a wolf
+
+    - - |
+        no
+        no
+      - a dog
   learner_created: false
-- name: test/unclear-answers.script.yaml
-  visible: false
-  text: |
-    #
-    # This is a script to test the interpretation of unclear responses.
-    #
-    ---
-    - [start]
-    - [input, cat]
-    - [input, ""]   # Press Enter to start the game
-    #
-    # The game started
-    #
-    - [contains, "Is it a cat?", "The program should ask: \"Is it a cat?\""]
-    #
-    # Here we substitute all values from the data file
-    #
-    - [input, "{0}"]
-    - - contains
-      - "yes or no"
-      - "The answer \"{0}\" is unclear and the program should ask again."
-  learner_created: false
-- name: src/animals/Node.java
-  visible: true
-  learner_created: true
-- name: src/animals/Tree.java
-  visible: true
-  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/11081#comment
-status: Unchecked
+status: Failed
+feedback:
+  message: "Wrong answer in test #5\n\nWhen the program starts, the knowledge tree\
+    \ is empty.\nThe program should express its desire to learn about animals.\n\r\
+    \nExpected contains: &quot;I want to learn about animals&quot;\r\nActual data\
+    \ is: &quot;I know a lot about animals.\nLet&#39;s play a game!\nYou think of\
+    \ an animal, and I guess it.\nPress enter when you&#39;re ready.&quot;.\n\nPlease\
+    \ find below the output of your program during this failed test.\nNote that the\
+    \ &#39;&gt;&#39; character indicates the beginning of the input line.\n\n---\n\
+    \nScenario &#39;guessing-game&#39; is started.\n\nGood afternoon\nI want to learn\
+    \ about animals.\nWhich animal do you like most?\n&gt; cat\nI&#39;ve learned so\
+    \ much about the animals!\nLet&#39;s play a game!\nYou think of an animal, and\
+    \ I guess it.\nPress enter when you&#39;re ready.\n&gt; \nIs it a cat?\n&gt; No\n\
+    I give up. What animal do you have in mind?\n&gt; dog\nSpecify a fact that distinguishes\
+    \ a cat from a dog.\n&gt; it can climb trees\nIs the statement correct for a dog?\n\
+    &gt; no\nI have learned the following facts about animals:\nThe cat can climb\
+    \ trees\nThe dog can&#39;t climb trees\nI can distinguish these animals by asking\
+    \ the question:\nCan it climb trees?\nNice! I&#39;ve learned so much about animals!\n\
+    Would you like to play again?\n&gt; yes\nYou think of an animal, and I guess it.\n\
+    Press enter when you&#39;re ready.\n&gt; \nCan it climb trees?\n&gt; yes\nIs it\
+    \ a cat?\n&gt; no\nI give up. What animal do you have in mind?\n&gt; lynx\nSpecify\
+    \ a fact that distinguishes a cat from a lynx.\n&gt; it has tassels on his ears\n\
+    Is the statement correct for a lynx?\n&gt; yes\nI have learned the following facts\
+    \ about animals:\nThe lynx has tassels on his ears\nThe cat doesn&#39;t have tassels\
+    \ on hisn&#39;t ears\nI can distinguish these animals by asking the question:\n\
+    does it have tassels on his ears?\nNice! I&#39;ve learned so much about animals!\n\
+    Would you like to play again?\n&gt; yes\nYou think of an animal, and I guess it.\n\
+    Press enter when you&#39;re ready.\n&gt; \nCan it climb trees?\n&gt; no\nIs it\
+    \ a dog?\n&gt; no\nI give up. What animal do you have in mind?\n&gt; wolf\nSpecify\
+    \ a fact that distinguishes a dog from a wolf.\n&gt; it is living in the forest\n\
+    Is the statement correct for a wolf?\n&gt; yes\nI have learned the following facts\
+    \ about animals:\nThe wolf is living in the forest\nThe dog isn&#39;t living in\
+    \ the forest\nI can distinguish these animals by asking the question:\nIs it living\
+    \ in the forest?\nNice! I&#39;ve learned so much about animals!\nWould you like\
+    \ to play again?\n&gt; yes\nYou think of an animal, and I guess it.\nPress enter\
+    \ when you&#39;re ready.\n&gt; \nCan it climb trees?\n&gt; yes\ndoes it have tassels\
+    \ on his ears?\n&gt; yes\nIs it a lynx?\n&gt; yes\nI win\nWould you like to play\
+    \ again?\n&gt; no\nSo long\nI know a lot about animals.\nLet&#39;s play a game!\n\
+    You think of an animal, and I guess it.\nPress enter when you&#39;re ready."
+  time: Fri, 29 Apr 2022 12:21:44 UTC
 record: 3

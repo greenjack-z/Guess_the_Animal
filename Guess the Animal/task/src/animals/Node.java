@@ -5,13 +5,19 @@ public class Node {
     private Node nodeYes;
     private Node nodeNo;
 
-    Node(String text) {
+    public Node() {
+        text = null;
+        nodeYes = null;
+        nodeNo = null;
+    }
+
+    public Node(String text) {
         this.text = text;
         nodeYes = null;
         nodeNo = null;
     }
 
-    Node(String text, Node leftNode, Node rightNode) {
+    public Node(String text, Node leftNode, Node rightNode) {
         this.text = text;
         this.nodeYes = leftNode;
         this.nodeNo = rightNode;

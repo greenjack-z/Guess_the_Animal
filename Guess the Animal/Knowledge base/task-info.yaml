@@ -346,6 +346,12 @@ files:
 
     }
   learner_created: false
+- name: test/guessing-game.data.yaml
+  visible: true
+  learner_created: false
+- name: test/guessing-game.script.yaml
+  visible: true
+  learner_created: false
 feedback_link: https://hyperskill.org/learn/step/11083#comment
 status: Unchecked
 record: -1

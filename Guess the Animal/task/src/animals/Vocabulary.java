@@ -23,11 +23,11 @@ public class Vocabulary {
 
     public String clarification() {
         List<String> sentences = List.of(
-            "I'm not sure I caught you: was it yes or no?",
-            "Funny, I still don't understand, is it yes or no?",
-            "Oh, it's too complicated for me: just tell me yes or no.",
-            "Could you please simply say yes or no?",
-            "Oh, no, don't try to confuse me: say yes or no."
+                "I'm not sure I caught you: was it yes or no?",
+                "Funny, I still don't understand, is it yes or no?",
+                "Oh, it's too complicated for me: just tell me yes or no.",
+                "Could you please simply say yes or no?",
+                "Oh, no, don't try to confuse me: say yes or no."
         );
         return sentences.get(RND.nextInt(sentences.size()));
     }
