@@ -5,17 +5,17 @@ import java.util.List;
 import java.util.Random;
 
 public class Vocabulary {
-    final static Random RND = new Random();
+    static final Random RND = new Random();
 
     public String greeting() {
         LocalTime time = LocalTime.now();
-        if (time.isAfter(LocalTime.of(05, 00)) && time.isBefore(LocalTime.of(12, 01))) {
+        if (time.isAfter(LocalTime.of(5, 0)) && time.isBefore(LocalTime.of(12, 1))) {
             return "Good morning";
         }
-        if (time.isAfter(LocalTime.of(12, 00)) && time.isBefore(LocalTime.of(18, 01))) {
+        if (time.isAfter(LocalTime.of(12, 0)) && time.isBefore(LocalTime.of(18, 1))) {
             return "Good afternoon";
         }
-        if (time.isAfter(LocalTime.of(18, 00)) && time.isBefore(LocalTime.of(05, 01))) {
+        if (time.isAfter(LocalTime.of(18, 0)) && time.isBefore(LocalTime.of(5, 1))) {
             return "Good evening";
         }
         return "Error";
@@ -69,7 +69,7 @@ public class Vocabulary {
                 "nah",
                 "nope",
                 "negative",
-                "I don't think so",
+                "i don't think so",
                 "yeah no"
         );
         return  sentences.contains(input.replaceAll("\\b[.!]",""));

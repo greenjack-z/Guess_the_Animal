@@ -1,25 +1,44 @@
 package animals;
 
 public class Tree {
-    Node root;
+    private Node root;
+    private Node current;
+    private Node parent;
 
-    Tree() {
+    public Tree() {
         root = null;
+        parent = null;
+        current = null;
     }
 
-    public void setRoot(Node node) {
-        root = node;
+    public Node getRoot() {
+        return root;
     }
 
-    public void showTree() {
-        show(root);
+    public Node getCurrent() {
+        return current;
     }
 
-    public void show(Node node) {
-        if (node != null) {
-            System.out.println(" " + node.value);
-            show(node.left);
-            show(node.right);
+    public void setCurrent(Node current) {
+        this.current = current;
+    }
+
+    public void setParent(Node parent) {
+        this.parent = parent;
+    }
+
+    public void addNode(Node node) {
+        if (current == null) {
+            current = node;
+        }
+        if (parent == null) {
+            root = node;
+        } else {
+            if (current == parent.getNodeYes()) {
+                parent.setNodeYes(node);
+            } else {
+                parent.setNodeNo(node);
+            }
         }
     }
 }

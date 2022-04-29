@@ -1,17 +1,40 @@
 package animals;
 
 public class Node {
-    String value;
-    Node left;
-    Node right;
+    private final String text;
+    private Node nodeYes;
+    private Node nodeNo;
 
-    Node(String value) {
-        this.value = value;
+    Node(String text) {
+        this.text = text;
+        nodeYes = null;
+        nodeNo = null;
     }
 
-    Node(String value, Node left, Node right) {
-        this(value);
-        this.left = left;
-        this.right = right;
+    Node(String text, Node leftNode, Node rightNode) {
+        this.text = text;
+        this.nodeYes = leftNode;
+        this.nodeNo = rightNode;
     }
+
+    public Node getNodeYes() {
+        return nodeYes;
+    }
+
+    public void setNodeYes(Node nodeYes) {
+        this.nodeYes = nodeYes;
+    }
+
+    public Node getNodeNo() {
+        return nodeNo;
+    }
+
+    public void setNodeNo(Node nodeNo) {
+        this.nodeNo = nodeNo;
+    }
+
+    public String getText() {
+        return text;
+    }
+
 }
