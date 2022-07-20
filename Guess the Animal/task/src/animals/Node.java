@@ -1,5 +1,7 @@
 package animals;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Node {
     private final String text;
     private Node nodeYes;
@@ -41,6 +43,10 @@ public class Node {
 
     public String getText() {
         return text;
+    }
+    @JsonIgnore
+    public Boolean isAnimal() {
+        return nodeYes == null && nodeNo == null;
     }
 
 }
